@@ -1,8 +1,12 @@
 package pulse.services
 package example
 
-import core.ServiceApp
+import core.Server
+import fs2.Task
 
-object Main extends ServiceApp {
+import fs2.{Stream => Process}
 
+object Main extends Server {
+
+  def server (args: Array[String]): Process[Task, Unit] = ???
 }

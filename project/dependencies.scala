@@ -14,6 +14,31 @@ object dependencies {
     val fs2        = "0.9.4"
     val logback    = "1.1.7"
     val scalalog   = "3.5.0"
+    val finagle    = "6.43.0"
+    val finch      = "0.13.0"
+    val circe      = "0.7.0"
+
+    object twitter {
+      val server  = "1.28.0"
+      val finagle = "6.43.0"
+    }
+  }
+
+  object finch {
+    val core  = "com.github.finagle" %% "finch-core"  % versions.finch
+    val circe = "com.github.finagle" %% "finch-circe" % versions.finch
+    val test  = "com.github.finagle" %% "finch-test"  % versions.finch
+  }
+
+  object circe {
+    val core    = "io.circe" %% "circe-core"    % versions.circe
+    val generic = "io.circe" %% "circe-generic" % versions.circe
+    val parser  = "io.circe" %% "circe-parser"  % versions.circe
+  }
+
+  object finagle {
+    val core   = "com.twitter" %% "finagle-http"   % versions.twitter.finagle
+    val server = "com.twitter" %% "twitter-server" % versions.twitter.server
   }
 
   object logback {
