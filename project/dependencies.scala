@@ -1,4 +1,4 @@
-import sbt._
+import sbt._, Keys._
 
 object dependencies {
 
@@ -6,18 +6,17 @@ object dependencies {
   def _provided (module: ModuleID): ModuleID = module % "provided"
 
   object versions {
-    val scalatest  = "2.2.6"
-    val shapeless  = "2.3.2"
+    val scalatest = "2.2.6"
+    val shapeless = "2.3.2"
     val simulacrum = "0.10.0"
-    val commons    = "3.5"
-    val cats       = "0.9.0"
-    val fs2        = "0.9.4"
-    val logback    = "1.1.7"
-    val scalalog   = "3.5.0"
-    val finagle    = "6.43.0"
-    val finch      = "0.13.0"
-    val circe      = "0.7.0"
-
+    val commons = "3.5"
+    val cats = "0.9.0"
+    val fs2 = "0.9.4"
+    val logback = "1.1.7"
+    val scalalog = "3.5.0"
+    val finagle = "6.43.0"
+    val finch = "0.13.0"
+    val circe = "0.7.0"
     object twitter {
       val server  = "1.28.0"
       val finagle = "6.43.0"

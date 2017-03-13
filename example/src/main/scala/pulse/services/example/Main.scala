@@ -1,12 +1,19 @@
 package pulse.services
 package example
 
-import core.Server
-import fs2.Task
+import com.twitter.finagle.{Http, ListeningServer, Service}
+import com.twitter.finagle.http.{Request, Response}
+import com.twitter.util.Future
+import core.ServerApp
 
-import fs2.{Stream => Process}
+object Main extends ServerApp {
 
-object Main extends Server {
+  //def server (args: Array[String]): Process[Task, Unit] = ???
+  val server: ListeningServer = {
+    val service: Service[Request, Response] = new Service[Request, Response] {
+      def apply(req: Request): Future[Response] = Future.value(Response())
+    }
 
-  def server (args: Array[String]): Process[Task, Unit] = ???
+    Http.server.serve(":8080", service)
+  }
 }
