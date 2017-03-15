@@ -1,21 +1,22 @@
 package pulse.services.core
 
 import com.twitter.util._
-import pulse.services.logging._
 import FutureMonad._
 import com.twitter.finagle.ListeningServer
 import com.twitter.server.TwitterServer
+import com.typesafe.scalalogging.Logger
 
-// TODO: use logging instead of stdout
-// TODO: add error handling of futures. Maybe it's better to convert them to tasks
 trait ServerApp extends TwitterServer {
+
+  implicit val logger = Logger(classOf[ServerApp])
 
   val server: ListeningServer
 
   def main(): Unit = {
     getOrLogError(stateMachine.transitTo(Starting)) { startingState =>
       Await.ready(startingState)
-      sys.addShutdownHook(onExitRequested)
+      // this handler is called from onExit
+      //sys.addShutdownHook(onExitRequested)
       Await.ready(server)
     }
   }
@@ -28,17 +29,17 @@ trait ServerApp extends TwitterServer {
 
   private val stateMachine = new StateMachine[LifeCycle, Future] {
     val transitions: Map[(LifeCycle, LifeCycle), LifeCycle => Future[LifeCycle]] =
-      Map(((Init, Starting) -> startServer),
-        ((Started, Stopping) -> stopServer))
+      Map(((Init, Starting) -> startServerInternal),
+        ((Started, Stopping) -> stopServerInternal))
 
     val initialState = Init
   }
 
-  private def startServer(state: LifeCycle): Future[LifeCycle] = {
+  private def startServerInternal(state: LifeCycle): Future[LifeCycle] = {
     Future.apply(Started)
   }
 
-  private def stopServer(state: LifeCycle): Future[LifeCycle] = {
+  private def stopServerInternal(state: LifeCycle): Future[LifeCycle] = {
     server.close().map(x => Stopped)
   }
 
@@ -46,7 +47,7 @@ trait ServerApp extends TwitterServer {
     transitioned match {
       case Right(state) =>
         continuation(state)
-      case Left(failure) => println(failure)
+      case Left(failure) => logger.error(failure)
     }
   }
 
