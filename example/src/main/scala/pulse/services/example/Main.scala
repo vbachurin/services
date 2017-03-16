@@ -6,5 +6,7 @@ import core.ServerApp
 
 
 object Main extends ServerApp {
-  val server: ListeningServer = Http.server.serve(":8080", ExampleApi.apiService)
+  val useTaskApi = flag("use.task.api", false, "true is use task api, otherwise use future api")
+
+  def server: ListeningServer = Http.server.serve(":8080", ExampleApi(useTaskApi()).apiService)
 }

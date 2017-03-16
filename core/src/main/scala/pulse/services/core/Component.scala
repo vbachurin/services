@@ -5,7 +5,7 @@ import com.twitter.util.{Future, Promise, Return, Throw}
 import fs2.Task
 
 
-abstract class Component {
+trait Component {
 
   private val _taskTransform = new (Task ~> Future) {
     override def apply[A](fa: Task[A]): Future[A] = {

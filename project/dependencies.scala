@@ -14,12 +14,11 @@ object dependencies {
     val fs2 = "0.9.4"
     val logback = "1.1.7"
     val scalalog = "3.5.0"
-    val finagle = "6.43.0"
-    val finch = "0.13.0"
+    val finch = "0.13.1"
     val circe = "0.7.0"
     object twitter {
-      val server  = "1.28.0"
-      val finagle = "6.43.0"
+      val server  = "1.27.0"
+      val finagle = "6.42.0"
     }
   }
 

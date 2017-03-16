@@ -10,14 +10,16 @@ trait ServerApp extends TwitterServer {
 
   implicit val logger = Logger(classOf[ServerApp])
 
-  val server: ListeningServer
+  def server: ListeningServer
+
+  lazy val serverInstance = server
 
   def main(): Unit = {
     getOrLogError(stateMachine.transitTo(Starting)) { startingState =>
       Await.ready(startingState)
       // this handler is called from onExit
       //sys.addShutdownHook(onExitRequested)
-      Await.ready(server)
+      Await.ready(serverInstance)
     }
   }
 
@@ -40,7 +42,7 @@ trait ServerApp extends TwitterServer {
   }
 
   private def stopServerInternal(state: LifeCycle): Future[LifeCycle] = {
-    server.close().map(x => Stopped)
+    serverInstance.close().map(x => Stopped)
   }
 
   private def getOrLogError(transitioned: Either[String, Future[LifeCycle]])(continuation: Future[LifeCycle] => Unit): Unit = {
