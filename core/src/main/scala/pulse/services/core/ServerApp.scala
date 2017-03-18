@@ -1,4 +1,5 @@
-package pulse.services.core
+package pulse.services
+package core
 
 import com.twitter.util._
 import FutureMonad._
@@ -8,17 +9,30 @@ import com.typesafe.scalalogging.Logger
 
 trait ServerApp extends TwitterServer {
 
-  implicit val logger = Logger(classOf[ServerApp])
+  private type State = LifeCycle
 
-  def server: ListeningServer
+  override def allowUndefinedFlags: Boolean = true
 
-  lazy val serverInstance = server
+  private implicit val logger = Logger[this.type]
+
+  private var serverInstance: ListeningServer = _
+
+  private val stateMachine = new StateMachine[State, Future] {
+    val transitions: Map[(LifeCycle, LifeCycle), LifeCycle => Future[LifeCycle]] =
+      Map((Init, Starting) -> startServerInternal,
+        (Started, Stopping) -> stopServerInternal
+      )
+
+    val initialState = Init
+  }
+
+  def server(args: List[String]): ListeningServer
 
   def main(): Unit = {
     getOrLogError(stateMachine.transitTo(Starting)) { startingState =>
+
       Await.ready(startingState)
-      // this handler is called from onExit
-      //sys.addShutdownHook(onExitRequested)
+      serverInstance = server(args.toList)
       Await.ready(serverInstance)
     }
   }
@@ -29,23 +43,15 @@ trait ServerApp extends TwitterServer {
     }
   }
 
-  private val stateMachine = new StateMachine[LifeCycle, Future] {
-    val transitions: Map[(LifeCycle, LifeCycle), LifeCycle => Future[LifeCycle]] =
-      Map(((Init, Starting) -> startServerInternal),
-        ((Started, Stopping) -> stopServerInternal))
-
-    val initialState = Init
-  }
-
-  private def startServerInternal(state: LifeCycle): Future[LifeCycle] = {
+  private def startServerInternal(state: LifeCycle): Future[State] = {
     Future.apply(Started)
   }
 
-  private def stopServerInternal(state: LifeCycle): Future[LifeCycle] = {
-    serverInstance.close().map(x => Stopped)
+  private def stopServerInternal(state: LifeCycle): Future[State] = {
+    serverInstance.close().map(_ => Stopped)
   }
 
-  private def getOrLogError(transitioned: Either[String, Future[LifeCycle]])(continuation: Future[LifeCycle] => Unit): Unit = {
+  private def getOrLogError(transitioned: Either[String, Future[State]])(continuation: Future[State] => Unit): Unit = {
     transitioned match {
       case Right(state) =>
         continuation(state)

@@ -6,6 +6,7 @@ libraryDependencies ++= Seq (
   fs2.core,
   logback.core,
   logger.core,
+  scopt.cmdConfig,
   _test(scalatest.core)
 )
 

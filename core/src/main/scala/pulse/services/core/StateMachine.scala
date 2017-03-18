@@ -17,7 +17,7 @@ trait StateMachine[State, M[_]] {
   def transitTo(newState: State)(implicit monad: Monad[M]): Either[String, M[State]] = {
     val currentState = state.get()
     transitions.get((currentState, newState)) match {
-      case Some(transition) if (state.compareAndSet(currentState, newState)) =>
+      case Some(transition) if state.compareAndSet(currentState, newState) =>
         val updatedState: M[State] = monad.flatMap(monad.pure(newState))(transition)
         Right(monad.flatMap(updatedState)(x => {
           state.set(x)
