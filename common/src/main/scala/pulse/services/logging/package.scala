@@ -26,5 +26,5 @@ package object logging extends LoggingDescriptors {
   /**
    * Describes the specified object
    */
-  def describe[T ](obj: T)(implicit S: Show[T]): String = S.show(obj)
+  def describe[T](obj: T)(implicit S: Show[T]): String = S.show(obj)
 }

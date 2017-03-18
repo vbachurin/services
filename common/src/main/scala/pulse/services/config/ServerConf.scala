@@ -6,4 +6,4 @@ package pulse.services.config
  * @param host server host
  * @param port server port
  */
-case class ServerConf (host: String, port: Int)
+case class ServerConf(host: String, port: Int)

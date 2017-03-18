@@ -1,12 +1,12 @@
 package pulse.services
 package example
 
-import core.Server
-import fs2.Task
+import com.twitter.finagle.{Http, ListeningServer}
+import core.ServerApp
 
-import fs2.{Stream => Process}
 
-object Main extends Server {
+object Main extends ServerApp {
+  val useTaskApi = flag("use.task.api", false, "true is use task api, otherwise use future api")
 
-  def server (args: Array[String]): Process[Task, Unit] = ???
+  def server: ListeningServer = Http.server.serve(":8080", ExampleApi(useTaskApi()).apiService)
 }
