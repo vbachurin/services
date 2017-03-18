@@ -16,10 +16,15 @@ object dependencies {
     val scalalog = "3.5.0"
     val finch = "0.13.1"
     val circe = "0.7.0"
+    val scopt = "3.5.0"
     object twitter {
       val server  = "1.27.0"
       val finagle = "6.42.0"
     }
+  }
+
+  object scopt {
+    val core = "com.github.scopt" %% "scopt" % versions.scopt
   }
 
   object finch {
