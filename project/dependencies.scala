@@ -24,7 +24,7 @@ object dependencies {
   }
 
   object scopt {
-    val cmdConfig = "com.github.scopt" %% "scopt" % versions.scopt
+    val core = "com.github.scopt" %% "scopt" % versions.scopt
   }
 
   object finch {
