@@ -2,7 +2,6 @@ package pulse.services
 package core
 
 import com.twitter.util._
-import FutureMonad._
 import com.twitter.finagle.ListeningServer
 import com.twitter.server.TwitterServer
 import com.typesafe.scalalogging.Logger
