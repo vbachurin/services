@@ -19,3 +19,9 @@ libraryDependencies ++= Seq (
 )
 
 console.settings
+
+assemblyMergeStrategy in assembly := {
+  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+  case "BUILD" => MergeStrategy.discard
+  case _ => MergeStrategy.deduplicate
+}
