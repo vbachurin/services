@@ -1,5 +1,7 @@
 package pulse.services.example.api.v1.status
 
+import java.nio.charset.Charset
+
 import com.twitter.util.Future
 import io.finch._
 import io.finch.circe._
@@ -21,8 +23,14 @@ object StatusTaskApi extends Component {
 
   def updateStatus: Endpoint[String] = post("v1" :: "status" :: stringBody) {
     s: String => {
-      AvroUtils.jsonToAvroBytes(s, "status.avro")
-      _transformTask(Task.now(Ok("")))
+      val bytes = AvroUtils.jsonToAvroBytes(s, "/Users/eugene/work/pulse/fgpservices/example/src/main/scala/pulse/services/example/status.avsc")
+      bytes match {
+        case Right(b) => _transformTask(Task.now(Ok(new String(b, Charset.defaultCharset())))
+        case Left(ex) => {
+          print(s"Error during json to avro serialization: ${ex.getMessage}")
+          _transformTask(Task.now(InternalServerError(new Exception(ex.getMessage)))
+        }
+      }
     }
   }
 }

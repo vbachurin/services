@@ -15,18 +15,24 @@ import java.lang._
   * Created by Andrew on 16.03.2017.
   */
 object StatusApi {
-  def statusApi(): Endpoint[:+:[Status, :+:[String, CNil]]] = status :+: updateStatus
+  def statusApi() = status :+: updateStatus
 
   def status: Endpoint[Status] =
     get("v1" :: "status") {
       Future(Ok(Status("fine")))
     }
+
   def updateStatus: Endpoint[String] = post("v1" :: "status" :: stringBody) {
     s: String => {
       // TODO: change your path
       val bytes = AvroUtils.jsonToAvroBytes(s, "/Users/eugene/work/pulse/fgpservices/example/src/main/scala/pulse/services/example/status.avsc")
-      val str = new String(bytes, Charset.defaultCharset())
-      Future(Ok(""))
+      bytes match {
+        case Right(b) => Future(Ok(new String(b, Charset.defaultCharset())))
+        case Left(ex) => {
+          print(s"Error during json to avro serialization: ${ex.getMessage}")
+          Future(InternalServerError(new Exception(ex.getMessage)))
+        }
+      }
     }
   }
 
