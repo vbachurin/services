@@ -28,7 +28,7 @@ object StatusTaskApi extends Component {
         case Success(b) => _transformTask(Task.now(Ok(new String(b, Charset.defaultCharset()))))
         case Failure(ex) => {
           print(s"Error during json to avro serialization: ${ex.getMessage}")
-          _transformTask(Task.now(InternalServerError(new Exception(ex.getMessage))))
+          _transformTask(Task.fail(new Exception(ex.getMessage)))
         }
       }
     }
