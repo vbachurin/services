@@ -1,23 +1,12 @@
 package pulse.services.example
 
-import java.io.Closeable
+import scala.util.{Failure, Success, Try}
 
 package object extensions {
 
-    def bracket[A <: Closeable, B](obj: A)(body: A => B) = {
-      use(obj)(o => o.close())(body)
-    }
-
-    def use[A, B](obj: => A)(close: A => Unit)(body: A => B): Either[Throwable, B] = {
-      try {
-        Right(body(obj))
-      }
-      catch {
-        case ex: Throwable => Left(ex)
-      }
-      finally {
-        close(obj)
-      }
-    }
+  def use[A,B](obj: A)(body: A => B)(implicit M: Managed[A]): Try[B] = Try(body(obj)) match {
+    case x: Success[B] => M.close(obj); x
+    case x: Failure[B] => M.close(obj); x
+  }
 
 }

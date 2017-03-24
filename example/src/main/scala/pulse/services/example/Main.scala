@@ -7,6 +7,6 @@ import core.ServerApp
 object Main extends ServerApp {
   def server(args: List[String]): ListeningServer = {
     val config = Config(args)
-    Http.server.serve(":8080", ExampleApi(config.useTaskApi).apiService)
+    Http.server.serve(":8080", ExampleApi(config.useTaskApi, config.statusAvroSchema).apiService)
   }
 }

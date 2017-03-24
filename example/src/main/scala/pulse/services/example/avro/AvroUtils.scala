@@ -8,12 +8,12 @@ import org.apache.avro.generic.{GenericDatumReader, GenericDatumWriter, GenericR
 import org.apache.avro.io.DecoderFactory
 import pulse.services.example.extensions._
 
-case object AvroUtils {
+object AvroUtils {
 
-  def jsonToAvroBytes(json: String, schema:String) = {
-    val schemaSpec = loadSchema(schema)
-    bracket(new ByteArrayOutputStream())(output => {
-      bracket(new ByteArrayInputStream(json.getBytes))(input => {
+  def jsonToAvroBytes(json: String, schemaFile: File) = {
+    use(new ByteArrayOutputStream())(output => {
+      val schemaSpec = loadSchema(schemaFile)
+      use(new ByteArrayInputStream(json.getBytes))(input => {
         val writer = new DataFileWriter[GenericRecord](new GenericDatumWriter[GenericRecord]())
         writer.create(schemaSpec, output)
         val reader = new GenericDatumReader[GenericRecord](schemaSpec)
@@ -28,6 +28,6 @@ case object AvroUtils {
   def getJsonDecoder(input: ByteArrayInputStream, schema: Schema) =
     DecoderFactory.get.jsonDecoder(schema, new DataInputStream(input))
 
-  def loadSchema(schema:String) =
-      new Schema.Parser().parse(new File(schema))
+  def loadSchema(schemaFile: File) =
+      new Schema.Parser().parse(schemaFile)
 }
