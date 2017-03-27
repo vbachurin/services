@@ -13,7 +13,9 @@ libraryDependencies ++= Seq (
   finch.core,
   finch.circe,
   circe.core,
+  circe.generic,
   scopt.core,
+  avro.core,
   _test(finch.test),
   _test(scalatest.core)
 )
