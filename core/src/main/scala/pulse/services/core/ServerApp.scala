@@ -26,8 +26,9 @@ trait ServerApp extends TwitterServer {
     }
   }
 
-  def startServer() = {
-    serverState.transitTo(Started).onSuccess(s => logger.info(s"Server is started on ${s.boundAddress}"))
+  def startServer(): ListeningServer = {
+    val starting = serverState.transitTo(Started).onSuccess(s => logger.info(s"Server is started on ${s.boundAddress}"))
+    Await.result(starting)
   }
 
   def stopServer(): Unit = {
@@ -37,7 +38,7 @@ trait ServerApp extends TwitterServer {
   def server(args: List[String]): ListeningServer
 
   def main(): Unit = {
-    Await.ready(Await.result(startServer()))
+    Await.ready(startServer())
   }
 
   init {
