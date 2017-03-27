@@ -5,15 +5,17 @@ import java.nio.charset.Charset
 
 import com.twitter.util.Future
 import io.finch._
+import pulse.services.example.Settings
 import pulse.services.example.avro.AvroUtils
 
 import scala.util.{Failure, Success}
+
 /**
   * Created by Andrew on 16.03.2017.
   */
 object StatusApi {
-  def statusApi(statusAvroSchema: File) = {
-    status :+: updateStatus(statusAvroSchema)
+  def statusApi(settings: Settings) = {
+    status :+: updateStatus(settings.statusAvroSchema)
   }
 
   def status: Endpoint[Status] =

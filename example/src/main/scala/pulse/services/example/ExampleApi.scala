@@ -14,9 +14,9 @@ import pulse.services.example.api.v1.status.{StatusApi, StatusTaskApi}
 case class ExampleApi(settings: Settings) extends ResponseEncoders {
   private def api = {
     if (settings.useTaskApi)
-      new StatusTaskApi(settings).statusApi()
+      StatusTaskApi.statusApi(settings)
     else
-      new StatusApi().statusApi()
+      StatusApi.statusApi(settings)
   }
 
   def apiService: Service[Request, Response] = api.toService

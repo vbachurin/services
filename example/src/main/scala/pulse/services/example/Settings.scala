@@ -1,5 +1,7 @@
 package pulse.services.example
 
+import java.io.File
+
 import com.typesafe.config.Config
 
 
@@ -12,6 +14,8 @@ trait Settings {
   val threadPoolMaxCount: Int
 
   val useTaskApi: Boolean
+
+  val statusAvroSchema: File
 }
 
 object Settings {
@@ -20,5 +24,7 @@ object Settings {
     val threadPoolMaxCount: Int = config.getInt("threadpool.maxCount")
 
     val useTaskApi = cliSettings.useTaskApi
+
+    val statusAvroSchema = cliSettings.statusAvroSchema
   }
 }
