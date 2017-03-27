@@ -11,4 +11,3 @@ lazy val common	 = project
 lazy val core	   = project.dependsOn(common)
 
 lazy val example = project.dependsOn(core)
-
