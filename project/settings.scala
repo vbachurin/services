@@ -1,13 +1,5 @@
 import sbt._, Keys._
-import java.io.File
-
-import scala.language.postfixOps
-
-import sbtassembly.AssemblyKeys._
-import sbtassembly.AssemblyPlugin._
-import sbtassembly._
-
-import com.typesafe.sbt.packager.docker._
+import sbtassembly._, AssemblyKeys._, AssemblyPlugin._
 import com.typesafe.sbt.SbtNativePackager._
 
 object settings {
@@ -51,5 +43,5 @@ object settings {
     }
   )
 
-  def sbtDocker = sbtAssembly ++ sbtDockerSettings
+  def docker = sbtAssembly ++ sbtDockerSettings
 }

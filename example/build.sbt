@@ -23,9 +23,7 @@ libraryDependencies ++= Seq (
 )
 
 console.settings
-settings.sbtDocker
-
-enablePlugins(DockerPlugin, JavaAppPackaging) // TODO: move to settings.scala (?)
+settings.docker
 
 dockerRepository := Some("pulse")
 dockerCommands := Seq(
