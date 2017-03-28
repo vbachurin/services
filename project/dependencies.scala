@@ -18,6 +18,7 @@ object dependencies {
     val circe = "0.7.0"
     val scopt = "3.5.0"
     val avro = "1.8.1"
+    val typesafe = "1.3.1"
     object twitter {
       val server  = "1.27.0"
       val finagle = "6.42.0"
@@ -26,6 +27,10 @@ object dependencies {
 
   object avro {
     val core = "org.apache.avro" % "avro" % versions.avro
+  }
+
+  object typesafe {
+    val config = "com.typesafe" % "config" % versions.typesafe
   }
 
   object scopt {

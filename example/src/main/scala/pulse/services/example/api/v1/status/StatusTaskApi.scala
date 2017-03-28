@@ -3,17 +3,19 @@ package pulse.services.example.api.v1.status
 import java.io.File
 import java.nio.charset.Charset
 
-import fs2.Task
+import fs2.{Strategy, Task}
 import io.finch._
 import pulse.services.core.Component
+import pulse.services.example.Settings
 import pulse.services.example.avro.AvroUtils
-import scala.util.{Failure, Success, Try}
+
+import scala.util.{Failure, Success}
 /**
   * Created by Andrew on 16.03.2017.
   */
 object StatusTaskApi extends Component {
-  def statusApi(statusAvroSchema: File) = {
-    status :+: updateStatus(statusAvroSchema)
+  def statusApi(settings: Settings) = {
+    status :+: updateStatus(settings.statusAvroSchema)(Strategy.fromFixedDaemonPool(settings.threadPoolMaxCount))
   }
 
   def status: Endpoint[Status] =
@@ -21,7 +23,7 @@ object StatusTaskApi extends Component {
       _transformTask(Task.now(Ok(Status("fine"))))
     }
 
-  def updateStatus(statusAvroSchema: File): Endpoint[String] = post("v1" :: "status" :: stringBody) {
+  def updateStatus(statusAvroSchema: File)(implicit strategy: Strategy): Endpoint[String] = post("v1" :: "status" :: stringBody) {
     s: String => {
       val bytes = AvroUtils.jsonToAvroBytes(s, statusAvroSchema)
       bytes match {

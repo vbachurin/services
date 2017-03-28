@@ -4,9 +4,9 @@ import java.io.File
 
 import scopt.OptionParser
 
-object Config {
-  def apply(args: List[String]): Config = {
-    val parser = new OptionParser[Config]("common") {
+object CliParameters {
+  def apply(args: List[String]): CliParameters = {
+    val parser = new OptionParser[CliParameters]("common") {
       opt[Boolean]("use-task-api")
         .action((b, c) => c.copy(useTaskApi = b))
         .text("Pass true or false for use-task-api parameter")
@@ -16,11 +16,11 @@ object Config {
         .text("Pass valid file path to status.avsc")
     }
 
-    parser.parse(args, Config()) match {
+    parser.parse(args, CliParameters()) match {
       case Some(config) => config
       case None => throw new InvalidCmdArgsException("Invalid arguments passed")
     }
   }
 }
 
-case class Config(statusAvroSchema: File = new File("."), useTaskApi: Boolean = false)
+case class CliParameters(statusAvroSchema: File = new File("."), useTaskApi: Boolean = false)

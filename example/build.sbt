@@ -18,6 +18,7 @@ libraryDependencies ++= Seq (
   circe.generic,
   scopt.core,
   avro.core,
+  typesafe.config,
   _test(finch.test),
   _test(scalatest.core)
 )
