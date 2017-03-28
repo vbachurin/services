@@ -2,7 +2,7 @@ package pulse.services.core
 
 import cats.{~>, _}
 import com.twitter.util.{Future, Promise, Return, Throw}
-import fs2.Task
+import fs2.{Strategy, Task}
 
 
 trait Component {
