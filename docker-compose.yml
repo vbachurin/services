@@ -1,0 +1,27 @@
+example-app:
+  image: pulse/example:0.1-SNAPSHOT
+  container_name: example-app
+  ports:
+    - "4000:4000"
+    - "8080:8080"
+jmxtrans:
+  build: docker
+  dockerfile: Dockerfile-jmxtrans
+  container_name: jmxtrans
+  environment:
+    JMX_HOST: example-app
+    JMX_PORT: 4000
+    STATSD_HOST: dashboard
+    STATSD_PORT: 8125
+  links:
+    - example-app
+    - dashboard
+dashboard:
+  image: kamon/grafana_graphite
+  container_name: dashboard
+  ports:
+    - "80:3000"
+    - "81:81"
+    - "8125:8125/udp"
+    - "8126:8126"
+    - "2003:2003"
