@@ -17,7 +17,8 @@ jmxtrans:
     - example-app
     - dashboard
 dashboard:
-  image: kamon/grafana_graphite
+  build: docker
+  dockerfile: Dockerfile-dashboard
   container_name: dashboard
   ports:
     - "80:3000"

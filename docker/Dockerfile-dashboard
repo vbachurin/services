@@ -1,0 +1,9 @@
+FROM kamon/grafana_graphite
+
+COPY run-grafana.sh /run-grafana.sh
+RUN chmod 755 /run-grafana.sh
+
+ENV GF_DASHBOARDS_JSON_ENABLED=true
+COPY dashboard.json /var/lib/grafana/dashboards/
+
+ENTRYPOINT ["/run-grafana.sh"]
