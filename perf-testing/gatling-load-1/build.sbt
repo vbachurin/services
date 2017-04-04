@@ -1,10 +1,11 @@
+import dependencies._
 import io.gatling.sbt.GatlingPlugin
 
 enablePlugins(GatlingPlugin)
 
 name := "gatling-load-1"
 
-organization := "org.crypto"
+organization := "pulse"
 
 scalaVersion := "2.11.8"
 
@@ -20,6 +21,6 @@ scalacOptions := Seq(
 javaOptions in Gatling := overrideDefaultJavaOptions("-Xms1G", "-Xmx5G", "-Djsse.enableSNIExtension=false")
 
 libraryDependencies ++= Seq(
-  "io.gatling.highcharts" % "gatling-charts-highcharts" % "2.2.3" % "test",
-  "io.gatling"            % "gatling-test-framework"    % "2.2.3" % "test"
+  gatling.framework,
+  gatling.highcharts
 )
